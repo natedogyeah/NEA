@@ -170,6 +170,7 @@ let maxEnemies = 10, lastDamageTime = 0, damageCooldown = 100;
 let currentWave = 0, enemiesToSpawn = 10, enemiesRemaining = 0;
 let coinCounter = 0, gameOver = false, gameOverButton, runMM = false;
 let postdeathCorrection = false;
+let tree;
 
 
 // Setup Function
@@ -177,10 +178,6 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   mainMenu();
   enemies = new Group();
-  player = new Sprite(70, 70, tornadoStrength, tornadoStrength, "d");
-  player.d = tornadoStrength;
-  player.color = color(160, 160, 160);
-  player.rotationLock = true;
 }
 
 // Main Menu
@@ -206,7 +203,7 @@ function mainMenu() {
 function draw() {
   back_Ground();
   how_PlayButton();
-  if (stage == 1 && tree.mouse.hovering()){
+  if (stage === 1 && tree.mouse.hovering()){
     console.log("it is a thing")
   }
 
@@ -214,7 +211,6 @@ function draw() {
   if (stage === 1) {
       playerMovement();
       cameraControl();
-      displayTornadoStrength();
  
       player.overlaps(house, (p, h) => {
           tornadoStrength += 5;
@@ -231,8 +227,6 @@ function draw() {
       playerMovement();
       cameraControl();
       chaserTowardsPlayer();
-      displayTornadoStrength();
-      displayCoinBalance();
   }
 
   if (game) {
@@ -261,7 +255,7 @@ function draw() {
           timer--;
           time = 0;
       }
-      if (timer === 25) {
+      if (timer === 1) {
           stage = 2;
           mainGame();
           timer = 0;
@@ -275,7 +269,7 @@ function draw() {
       enemies.forEach(enemy => {
         enemy.visible = false; // makes the sprite invisible
       });
-      stage = 0;
+      stage = 1;
       GO_Screen();
   }
 
@@ -418,7 +412,11 @@ function mainGame() {
       tiles1 = new Tiles(tilemap1, 0, 0, tileSize, tileSize);
   
       game = true;
-  
+
+      player = new Sprite(70, 70, tornadoStrength, tornadoStrength, "d");
+      player.d = tornadoStrength;
+      player.color = color(160, 160, 160);
+      player.rotationLock = true;
     } 
     else if (stage == 2) {
       clearGroups1();
@@ -447,11 +445,11 @@ function mainGame() {
 
       game = true;
   
-      // //player.remove();
-      // player = new Sprite(1250, 1200, tornadoStrength, tornadoStrength, "d");
-      // player.d = tornadoStrength;
-      // player.color = color(160, 160, 160);
-      // player.rotationLock = true;
+      player.remove();
+      player = new Sprite(1250, 1200, tornadoStrength, tornadoStrength, "d");
+      player.d = tornadoStrength;
+      player.color = color(160, 160, 160);
+      player.rotationLock = true;
 
       startWave();
     }
@@ -534,8 +532,8 @@ function cameraControl() {           // taken out because its buggin the game ov
 }
   
 function clearGroups1() {
-    //tiles1.remove();
-    //border.removeAll();
+    tiles1.remove();
+    border.removeAll();
 }
 
 function clearGroups2(){
